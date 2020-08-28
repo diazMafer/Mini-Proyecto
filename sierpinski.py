@@ -1,42 +1,30 @@
-import turtle
+from random import choice
+from matplotlib import pyplot as plt
+from numpy import array
 
-def dibujarTriangulo(puntos,color,miTortuga):
-    miTortuga.fillcolor(color)
-    miTortuga.up()
-    miTortuga.goto(puntos[0][0],puntos[0][1])
-    miTortuga.down()
-    miTortuga.begin_fill()
-    miTortuga.goto(puntos[1][0],puntos[1][1])
-    miTortuga.goto(puntos[2][0],puntos[2][1])
-    miTortuga.goto(puntos[0][0],puntos[0][1])
-    miTortuga.end_fill()
+v1 = (0.,0.)
+v2 = (1.,0.)
+v3 = (0.5, 1.0)
 
-def obtenerMitad(p1,p2):
-    return ( (p1[0]+p2[0]) / 2, (p1[1] + p2[1]) / 2)
+V = [v1, v2, v3]
+p0 = (0.5, 0.)
+T = [p0]
 
-def sierpinski(puntos,grado,miTortuga):
-    colormap = ['blue','red','green','white','yellow',
-                'violet','orange']
-    dibujarTriangulo(puntos,colormap[grado],miTortuga)
-    if grado > 0:
-        sierpinski([puntos[0],
-                        obtenerMitad(puntos[0], puntos[1]),
-                        obtenerMitad(puntos[0], puntos[2])],
-                   grado-1, miTortuga)
-        sierpinski([puntos[1],
-                        obtenerMitad(puntos[0], puntos[1]),
-                        obtenerMitad(puntos[1], puntos[2])],
-                   grado-1, miTortuga)
-        sierpinski([puntos[2],
-                        obtenerMitad(puntos[2], puntos[1]),
-                        obtenerMitad(puntos[0], puntos[2])],
-                   grado-1, miTortuga)
+#Encuentra el punto medio 
+def puntoMedio(x, y):
+    xf = (x[0]+y[0])/2
+    yf =  (x[1]+y[1])/2
+    return xf,yf
 
-def main():
-   miTortuga = turtle.Turtle()
-   miVentana = turtle.Screen()
-   misPuntos = [[-200,-70],[0,200],[200,-70]]
-   sierpinski(misPuntos,3,miTortuga)
-   miVentana.exitonclick()
+iters = 1000000
 
-main()
+for i in range(iters):
+    idx = choice([0,1,2])
+    vact = V[idx]
+    pact = T[-1]
+    psig = puntoMedio(pact,vact)
+    T.append(psig)
+
+T = array(T)
+plt.scatter(T[:,0], T[:,1], s=0.1)
+plt.show()
